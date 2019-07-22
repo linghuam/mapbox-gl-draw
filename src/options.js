@@ -18,6 +18,8 @@ const defaultOptions = {
 const showControls = {
   point: true,
   line_string: true,
+  free_line: true,
+  free_polygon: true,
   polygon: true,
   trash: true,
   combine_features: true,
@@ -27,6 +29,8 @@ const showControls = {
 const hideControls = {
   point: false,
   line_string: false,
+  free_line: false,
+  free_polygon: false,
   polygon: false,
   trash: false,
   combine_features: false,

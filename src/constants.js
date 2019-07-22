@@ -4,6 +4,8 @@ module.exports = {
     CONTROL_PREFIX: 'mapboxgl-ctrl-',
     CONTROL_BUTTON: 'mapbox-gl-draw_ctrl-draw-btn',
     CONTROL_BUTTON_LINE: 'mapbox-gl-draw_line',
+    CONTROL_BUTTON_FREE_LINE: 'mapbox-gl-draw_free_line',
+    CONTROL_BUTTON_FREE_POLYGON: 'mapbox-gl-draw_free_polygon',
     CONTROL_BUTTON_POLYGON: 'mapbox-gl-draw_polygon',
     CONTROL_BUTTON_POINT: 'mapbox-gl-draw_point',
     CONTROL_BUTTON_TRASH: 'mapbox-gl-draw_trash',
@@ -28,7 +30,9 @@ module.exports = {
   types: {
     POLYGON: 'polygon',
     LINE: 'line_string',
-    POINT: 'point'
+    POINT: 'point',
+    FREE_LINE: 'free_line',
+    FREE_POLYGON: 'free_polygon'
   },
   geojsonTypes: {
     FEATURE: 'Feature',
@@ -43,6 +47,8 @@ module.exports = {
   },
   modes: {
     DRAW_LINE_STRING: 'draw_line_string',
+    DRAW_FREE_LINE: 'draw_free_line',
+    DRAW_FREE_POLYGON: 'draw_free_polygon',
     DRAW_POLYGON: 'draw_polygon',
     DRAW_POINT: 'draw_point',
     SIMPLE_SELECT: 'simple_select',

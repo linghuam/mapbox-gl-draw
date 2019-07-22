@@ -113,6 +113,26 @@ module.exports = function(ctx) {
       });
     }
 
+    if (controls[Constants.types.FREE_LINE]) {
+      buttonElements[Constants.types.FREE_LINE] = createControlButton(Constants.types.FREE_LINE, 
+      {
+        container: controlGroup,
+        className: Constants.classes.CONTROL_BUTTON_FREE_LINE,
+        title: `Free line tool ${ctx.options.keybindings ? '(q)' : ''}`,
+        onActivate: () => ctx.events.changeMode(Constants.modes.DRAW_FREE_LINE)
+      });
+    }
+
+    if (controls[Constants.types.FREE_POLYGON]) {
+      buttonElements[Constants.types.FREE_POLYGON] = createControlButton(Constants.types.FREE_POLYGON, 
+      {
+        container: controlGroup,
+        className: Constants.classes.CONTROL_BUTTON_FREE_POLYGON,
+        title: `Free line tool ${ctx.options.keybindings ? '(r)' : ''}`,
+        onActivate: () => ctx.events.changeMode(Constants.modes.DRAW_FREE_POLYGON)
+      });
+    }
+
     if (controls[Constants.types.POLYGON]) {
       buttonElements[Constants.types.POLYGON] = createControlButton(Constants.types.POLYGON, {
         container: controlGroup,
