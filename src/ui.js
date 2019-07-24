@@ -128,7 +128,7 @@ module.exports = function(ctx) {
       {
         container: controlGroup,
         className: Constants.classes.CONTROL_BUTTON_FREE_POLYGON,
-        title: `Free line tool ${ctx.options.keybindings ? '(r)' : ''}`,
+        title: `Free line tool ${ctx.options.keybindings ? 'g' : ''}`,
         onActivate: () => ctx.events.changeMode(Constants.modes.DRAW_FREE_POLYGON)
       });
     }
@@ -140,6 +140,16 @@ module.exports = function(ctx) {
         className: Constants.classes.CONTROL_BUTTON_CIRCLE,
         title: `circle tool ${ctx.options.keybindings ? '(c)' : ''}`,
         onActivate: () => ctx.events.changeMode(Constants.modes.DRAW_CIRCLE)
+      });
+    }
+
+    if (controls[Constants.types.RECTANGLE]) {
+      buttonElements[Constants.types.RECTANGLE] = createControlButton(Constants.types.RECTANGLE, 
+      {
+        container: controlGroup,
+        className: Constants.classes.CONTROL_BUTTON_RECTANGLE,
+        title: `rectangle tool ${ctx.options.keybindings ? '(g)' : ''}`,
+        onActivate: () => ctx.events.changeMode(Constants.modes.DRAW_RECTANGLE)
       });
     }
 

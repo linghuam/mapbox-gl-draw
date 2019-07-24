@@ -22,6 +22,7 @@ const showControls = {
   free_polygon: true,
   polygon: true,
   circle: true,
+  rectangle: true,
   trash: true,
   combine_features: true,
   uncombine_features: true
@@ -33,6 +34,7 @@ const hideControls = {
   free_line: false,
   free_polygon: false,
   circle: false,
+  rectangle: false,
   polygon: false,
   trash: false,
   combine_features: false,

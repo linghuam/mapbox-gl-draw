@@ -175,7 +175,7 @@ DirectSelect.toDisplayFeatures = function(state, geojson, push) {
     const supplementaryPoints = geojson.properties.user_isCircle ? createSupplementaryPointsForCircle(geojson)
       : createSupplementaryPoints(geojson, {
         map: this.map,
-        midpoints: geojson.properties.user_type === Constants.customTypes.RECTANGLE ? false : true,
+        midpoints: true,
         selectedPaths: state.selectedCoordPaths
       });
     supplementaryPoints.forEach(push);

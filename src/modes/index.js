@@ -7,4 +7,5 @@ module.exports = {
   draw_free_line: require('./draw_free_line'),
   draw_free_polygon: require('./draw_free_polygon'),
   draw_circle: require('./draw_circle'),
+  draw_rectangle: require('./draw_rectangle'),
 };
