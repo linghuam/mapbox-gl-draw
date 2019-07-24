@@ -9,6 +9,11 @@ const moveFeatures = require('../lib/move_features');
 const isVertex = isOfMetaType(Constants.meta.VERTEX);
 const isMidpoint = isOfMetaType(Constants.meta.MIDPOINT);
 
+const distance = require('@turf/distance').default;
+const turfHelpers = require('@turf/helpers');
+const circle = require('@turf/circle').default;
+const createSupplementaryPointsForCircle = require('../lib/create_supplementary_points_circle');
+
 const DirectSelect = {};
 
 // INTERNAL FUCNTIONS
@@ -74,10 +79,25 @@ DirectSelect.onFeature = function(state, e) {
 
 DirectSelect.dragFeature = function(state, e, delta) {
   moveFeatures(this.getSelected(), delta);
+  this.getSelected()
+  .filter(feature => feature.properties.isCircle)
+  .map(circle => circle.properties.center)
+  .forEach(center => {
+    center[0] += delta.lng;
+    center[1] += delta.lat;
+  });
   state.dragMoveLocation = e.lngLat;
 };
 
 DirectSelect.dragVertex = function(state, e, delta) {
+  if (state.feature.properties.isCircle) {
+    const center = state.feature.properties.center;
+    const movedVertex = [e.lngLat.lng, e.lngLat.lat];
+    const radius = distance(turfHelpers.point(center), turfHelpers.point(movedVertex), {units: 'kilometers'});
+    const circleFeature = circle(center, radius);
+    state.feature.incomingCoords(circleFeature.geometry.coordinates);
+    state.feature.properties.radiusInKm = radius;
+  }
   const selectedCoords = state.selectedCoordPaths.map(coord_path => state.feature.getCoordinate(coord_path));
   const selectedCoordPoints = selectedCoords.map(coords => ({
     type: Constants.geojsonTypes.FEATURE,
@@ -152,11 +172,13 @@ DirectSelect.toDisplayFeatures = function(state, geojson, push) {
   if (state.featureId === geojson.properties.id) {
     geojson.properties.active = Constants.activeStates.ACTIVE;
     push(geojson);
-    createSupplementaryPoints(geojson, {
-      map: this.map,
-      midpoints: true,
-      selectedPaths: state.selectedCoordPaths
-    }).forEach(push);
+    const supplementaryPoints = geojson.properties.user_isCircle ? createSupplementaryPointsForCircle(geojson)
+      : createSupplementaryPoints(geojson, {
+        map: this.map,
+        midpoints: geojson.properties.user_type === Constants.customTypes.RECTANGLE ? false : true,
+        selectedPaths: state.selectedCoordPaths
+      });
+    supplementaryPoints.forEach(push);
   } else {
     geojson.properties.active = Constants.activeStates.INACTIVE;
     push(geojson);

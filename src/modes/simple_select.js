@@ -5,6 +5,7 @@ const StringSet = require('../lib/string_set');
 const doubleClickZoom = require('../lib/double_click_zoom');
 const moveFeatures = require('../lib/move_features');
 const Constants = require('../constants');
+const createSupplementaryPointsForCircle = require('../lib/create_supplementary_points_circle');
 
 const SimpleSelect = {};
 
@@ -257,6 +258,14 @@ SimpleSelect.dragMove = function(state, e) {
 
   moveFeatures(this.getSelected(), delta);
 
+  this.getSelected()
+  .filter(feature => feature.properties.isCircle)
+  .map(circle => circle.properties.center)
+  .forEach(center => {
+    center[0] += delta.lng;
+    center[1] += delta.lat;
+  });
+
   state.dragMoveLocation = e.lngLat;
 };
 
@@ -289,7 +298,10 @@ SimpleSelect.toDisplayFeatures = function(state, geojson, display) {
   this.fireActionable();
   if (geojson.properties.active !== Constants.activeStates.ACTIVE ||
     geojson.geometry.type === Constants.geojsonTypes.POINT) return;
-  createSupplementaryPoints(geojson).forEach(display);
+
+  const supplementaryPoints = geojson.properties.user_isCircle ?
+    createSupplementaryPointsForCircle(geojson) : createSupplementaryPoints(geojson);
+  supplementaryPoints.forEach(display);
 };
 
 SimpleSelect.onTrash = function() {

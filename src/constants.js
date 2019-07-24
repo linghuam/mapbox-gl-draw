@@ -8,6 +8,7 @@ module.exports = {
     CONTROL_BUTTON_FREE_POLYGON: 'mapbox-gl-draw_free_polygon',
     CONTROL_BUTTON_POLYGON: 'mapbox-gl-draw_polygon',
     CONTROL_BUTTON_POINT: 'mapbox-gl-draw_point',
+    CONTROL_BUTTON_CIRCLE: 'mapbox-gl-draw_circle',
     CONTROL_BUTTON_TRASH: 'mapbox-gl-draw_trash',
     CONTROL_BUTTON_COMBINE_FEATURES: 'mapbox-gl-draw_combine',
     CONTROL_BUTTON_UNCOMBINE_FEATURES: 'mapbox-gl-draw_uncombine',
@@ -32,7 +33,8 @@ module.exports = {
     LINE: 'line_string',
     POINT: 'point',
     FREE_LINE: 'free_line',
-    FREE_POLYGON: 'free_polygon'
+    FREE_POLYGON: 'free_polygon',
+    CIRCLE: 'circle'
   },
   geojsonTypes: {
     FEATURE: 'Feature',
@@ -51,6 +53,7 @@ module.exports = {
     DRAW_FREE_POLYGON: 'draw_free_polygon',
     DRAW_POLYGON: 'draw_polygon',
     DRAW_POINT: 'draw_point',
+    DRAW_CIRCLE: 'draw_circle',
     SIMPLE_SELECT: 'simple_select',
     DIRECT_SELECT: 'direct_select',
     STATIC: 'static'
