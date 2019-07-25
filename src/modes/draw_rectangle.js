@@ -6,7 +6,9 @@ const DrawRectangle = {};
 DrawRectangle.onSetup = function(opts) {
     const rectangle = this.newFeature({
         type: Constants.geojsonTypes.FEATURE,
-        properties: {},
+        properties: {
+          isRectangle: true
+        },
         geometry: {
           type: Constants.geojsonTypes.POLYGON,
           coordinates: [[]]

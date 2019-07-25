@@ -97,21 +97,47 @@ DirectSelect.dragVertex = function(state, e, delta) {
     const circleFeature = circle(center, radius);
     state.feature.incomingCoords(circleFeature.geometry.coordinates);
     state.feature.properties.radiusInKm = radius;
-  }
-  const selectedCoords = state.selectedCoordPaths.map(coord_path => state.feature.getCoordinate(coord_path));
-  const selectedCoordPoints = selectedCoords.map(coords => ({
-    type: Constants.geojsonTypes.FEATURE,
-    properties: {},
-    geometry: {
-      type: Constants.geojsonTypes.POINT,
-      coordinates: coords
-    }
-  }));
+  } else if(state.feature.properties.isRectangle) {
+    const selectedCoords = state.selectedCoordPaths.map(coord_path => state.feature.getCoordinate(coord_path));
+    const selectedCoordPoints = selectedCoords.map(coords => ({
+      type: Constants.geojsonTypes.FEATURE,
+      properties: {},
+      geometry: {
+        type: Constants.geojsonTypes.POINT,
+        coordinates: coords
+      }
+    }));
 
-  const constrainedDelta = constrainFeatureMovement(selectedCoordPoints, delta);
-  for (let i = 0; i < selectedCoords.length; i++) {
-    const coord = selectedCoords[i];
-    state.feature.updateCoordinate(state.selectedCoordPaths[i], coord[0] + constrainedDelta.lng, coord[1] + constrainedDelta.lat);
+    const constrainedDelta = constrainFeatureMovement(selectedCoordPoints, delta);
+    for (let i = 0; i < selectedCoords.length; i++) {
+      const coord = selectedCoords[i];
+      const currentIndex = Number(state.selectedCoordPaths[i].split('.')[1]);
+      const preIndex = currentIndex > 0 ? (currentIndex - 1) : 3;
+      const afterIndex = currentIndex < 3 ? (currentIndex + 1) : 0;
+      const preCoord = state.feature.getCoordinate(`0.${preIndex}`);
+      const afterCoord = state.feature.getCoordinate(`0.${afterIndex}`);
+      state.feature.updateCoordinate(state.selectedCoordPaths[i], coord[0] + constrainedDelta.lng, coord[1] + constrainedDelta.lat);
+      state.feature.updateCoordinate(`0.${preIndex}`, preCoord[0] === coord[0] ? (coord[0] + constrainedDelta.lng) : preCoord[0], preCoord[1] === coord[1] ? (coord[1] + constrainedDelta.lat) : preCoord[1]);
+      state.feature.updateCoordinate(`0.${afterIndex}`, afterCoord[0] === coord[0] ? (coord[0] + constrainedDelta.lng) : afterCoord[0], afterCoord[1] === coord[1] ? (coord[1] + constrainedDelta.lat) : afterCoord[1]);
+      const firstCoord = state.feature.getCoordinate(`0.0`);
+      state.feature.updateCoordinate(`0.4`, firstCoord[0], firstCoord[1]);
+    }
+  } else {
+    const selectedCoords = state.selectedCoordPaths.map(coord_path => state.feature.getCoordinate(coord_path));
+    const selectedCoordPoints = selectedCoords.map(coords => ({
+      type: Constants.geojsonTypes.FEATURE,
+      properties: {},
+      geometry: {
+        type: Constants.geojsonTypes.POINT,
+        coordinates: coords
+      }
+    }));
+  
+    const constrainedDelta = constrainFeatureMovement(selectedCoordPoints, delta);
+    for (let i = 0; i < selectedCoords.length; i++) {
+      const coord = selectedCoords[i];
+      state.feature.updateCoordinate(state.selectedCoordPaths[i], coord[0] + constrainedDelta.lng, coord[1] + constrainedDelta.lat);
+    }
   }
 };
 
@@ -175,7 +201,7 @@ DirectSelect.toDisplayFeatures = function(state, geojson, push) {
     const supplementaryPoints = geojson.properties.user_isCircle ? createSupplementaryPointsForCircle(geojson)
       : createSupplementaryPoints(geojson, {
         map: this.map,
-        midpoints: true,
+        midpoints: geojson.properties.user_isRectangle ? false : true,
         selectedPaths: state.selectedCoordPaths
       });
     supplementaryPoints.forEach(push);
